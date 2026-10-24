@@ -1,0 +1,19 @@
+# Local editor / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local/server logs
+*.log
+
+# Optional local configuration
+.env
+.env.*
+local-config.js
+
+# Build/temp folders
+node_modules/
+dist/
+build/
+coverage/
