@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mading Digital RT 003 / RW 002 — Desa Semidang Alas</title>
+  <meta name="description" content="Mading Digital RT 003 / RW 002 Desa Semidang Alas untuk pengumuman, kegiatan, ronda malam, dan transparansi kas warga.">
+  <meta name="theme-color" content="#0f172a">
+  <link rel="icon" href="public/favicon.ico">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          boxShadow: {
+            soft: '0 16px 45px rgba(15,23,42,.08)'
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="hero-gradient text-white">
+    <nav class="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
+      <a href="#beranda" class="flex items-center gap-3" aria-label="Beranda">
+        <div class="w-11 h-11 rounded-xl bg-white flex items-center justify-center overflow-hidden shadow-sm">
+          <img src="public/logo-pagaralam.png" alt="Logo RT 003" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <span class="hidden text-xs font-bold text-slate-800">RT</span>
+        </div>
+        <div>
+          <p class="font-bold leading-tight">Mading Digital</p>
+          <p class="text-xs text-slate-300">RT 003 / RW 002 · Semidang Alas</p>
+        </div>
+      </a>
+      <div class="hidden sm:flex items-center gap-5 text-sm text-slate-200">
+        <a href="#pengumuman" class="hover:text-white transition-colors">Pengumuman</a>
+        <a href="#kegiatan" class="hover:text-white transition-colors">Kegiatan</a>
+        <a href="#keuangan" class="hover:text-white transition-colors">Keuangan</a>
+        <a href="admin.html" class="px-4 py-2 rounded-xl bg-white/10 border border-white/15 hover:bg-white/15 transition-colors">Admin</a>
+      </div>
+    </nav>
+
+    <section id="beranda" class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 pb-16 sm:pt-12 sm:pb-24">
+      <div class="grid lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-7">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/15 text-xs text-slate-200 mb-5">
+            <span class="status-dot"></span>
+            Pusat informasi warga
+          </div>
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
+            <span class="whitespace-nowrap">Mading Digital</span><br>
+            <span class="text-sky-300 whitespace-nowrap">RT 003 / RW 002</span>
+          </h1>
+          <p class="mt-4 text-slate-200 max-w-2xl leading-7 text-sm sm:text-base">
+            Satu tempat untuk mengetahui pengumuman penting, jadwal kegiatan dan ronda, serta ringkasan kas warga secara terbuka dan mudah diakses dari HP.
+          </p>
+          <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <a href="#pengumuman" class="inline-flex justify-center px-5 py-3 rounded-xl bg-white text-slate-900 font-semibold hover:bg-slate-100 text-sm transition-colors">Lihat informasi</a>
+            <a href="#kegiatan" class="inline-flex justify-center px-5 py-3 rounded-xl border border-white/20 bg-white/5 font-semibold hover:bg-white/10 text-sm transition-colors">Jadwal warga</a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 glass rounded-3xl p-5 sm:p-6 text-slate-900 shadow-soft">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm font-semibold text-slate-500">Status mading</p>
+              <p id="api-status" class="mt-1 text-base sm:text-lg font-bold">Memuat data…</p>
+            </div>
+            <span id="last-updated" class="text-xs text-slate-500 text-right"></span>
+          </div>
+          <div class="grid grid-cols-3 gap-3 mt-5">
+            <div class="rounded-2xl bg-slate-50 p-3 sm:p-4 text-center">
+              <p id="stat-announcements" class="text-xl sm:text-2xl font-black">—</p>
+              <p class="text-xs text-slate-500 mt-1">Pengumuman</p>
+            </div>
+            <div class="rounded-2xl bg-slate-50 p-3 sm:p-4 text-center">
+              <p id="stat-schedules" class="text-xl sm:text-2xl font-black">—</p>
+              <p class="text-xs text-slate-500 mt-1">Agenda</p>
+            </div>
+            <div class="rounded-2xl bg-slate-50 p-3 sm:p-4 text-center">
+              <p id="stat-finance" class="text-xl sm:text-2xl font-black">—</p>
+              <p class="text-xs text-slate-500 mt-1">Transaksi</p>
+            </div>
+          </div>
+          <div class="mt-5 p-4 rounded-2xl bg-sky-50 border border-sky-100">
+            <p class="text-xs font-semibold uppercase tracking-wider text-sky-700">Catatan</p>
+            <p class="text-xs sm:text-sm text-sky-900 mt-1 leading-6">Informasi akan diperbarui oleh pengurus melalui halaman admin.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-16">
+    <section id="pengumuman" class="mb-12">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-5">
+        <div>
+          <p class="text-sm font-semibold text-blue-600">01 · Pengumuman</p>
+          <h2 class="text-2xl sm:text-3xl font-black mt-1">Informasi penting warga</h2>
+        </div>
+        <span id="announcement-count-label" class="text-sm text-slate-500 font-medium"></span>
+      </div>
+      <div id="announcement-list" class="grid md:grid-cols-2 lg:grid-cols-3 gap-5" aria-live="polite"></div>
+    </section>
+
+    <section id="kegiatan" class="mb-12">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-5">
+        <div>
+          <p class="text-sm font-semibold text-teal-600">02 · Kegiatan</p>
+          <h2 class="text-2xl sm:text-3xl font-black mt-1">Jadwal kegiatan & ronda</h2>
+        </div>
+        <span class="text-sm text-slate-500 font-medium">Agenda terbaru ditampilkan lebih dahulu</span>
+      </div>
+      <div id="schedule-list" class="space-y-4" aria-live="polite"></div>
+    </section>
+
+    <section id="keuangan" class="mb-12">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-5">
+        <div>
+          <p class="text-sm font-semibold text-emerald-600">03 · Transparansi</p>
+          <h2 class="text-2xl sm:text-3xl font-black mt-1">Ringkasan kas warga</h2>
+        </div>
+        <span class="text-sm text-slate-500 font-medium">Ringkasan transaksi kas yang dipublikasikan</span>
+      </div>
+
+      <div class="grid sm:grid-cols-3 gap-4 mb-5">
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-soft">
+          <p class="text-sm text-slate-500">Total pemasukan</p>
+          <p id="finance-income" class="text-2xl font-black mt-1 text-emerald-700">Rp0</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-soft">
+          <p class="text-sm text-slate-500">Total pengeluaran</p>
+          <p id="finance-expense" class="text-2xl font-black mt-1 text-rose-700">Rp0</p>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-soft">
+          <p class="text-sm text-slate-500">Saldo berjalan</p>
+          <p id="finance-balance" class="text-2xl font-black mt-1">Rp0</p>
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl shadow-soft overflow-hidden">
+        <div class="p-5 border-b border-slate-100">
+          <h3 class="font-bold">Transaksi terbaru</h3>
+          <p class="text-sm text-slate-500 mt-1">Nominal ditampilkan untuk menjaga transparansi sederhana.</p>
+        </div>
+        <div class="table-scroll">
+          <table class="min-w-full text-sm">
+            <thead class="bg-slate-50 text-slate-500">
+              <tr>
+                <th class="text-left px-5 py-3 font-semibold">Tanggal</th>
+                <th class="text-left px-5 py-3 font-semibold">Keterangan</th>
+                <th class="text-left px-5 py-3 font-semibold">Kategori</th>
+                <th class="text-right px-5 py-3 font-semibold">Nominal</th>
+              </tr>
+            </thead>
+            <tbody id="finance-table"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8 flex flex-col sm:flex-row gap-3 justify-between text-sm text-slate-500">
+      <p>© <span id="year"></span> RT 003 / RW 002 Desa Semidang Alas.</p>
+      <p>Mading Digital · Informasi warga yang mudah diakses.</p>
+    </div>
+  </footer>
+
+  <div id="toast-wrap" class="toast-wrap"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
