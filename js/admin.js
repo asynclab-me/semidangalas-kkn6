@@ -1,10 +1,11 @@
-/* Mading Digital RT 003 / RW 002
- * Admin frontend for the Google Apps Script Web App.
+/* Portal Informasi Warga RT 003 / RW 002 Desa Semidang Alas
+ * Client-Side JavaScript for Admin Panel
  */
 (() => {
   'use strict';
 
-  const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbwxXe6GzAb2vTgmjrRCmyTFrwq9JnSi-L3IWYVYXU2OENRbFH84iE2Ex6golr1fEb9DSA/exec';
+  // Pastikan URL Web App GAS Anda sudah benar di sini:
+  const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbyKajpK_rDY6vETogHZWFahwjYQ5z_b-fOW6xO2NZ-_6fhXhSSmvSJB6eISP7pkZIKGvA/exec'; 
   const API_URL_KEY = 'mading_rt003_api_url';
   const SESSION_KEY = 'mading_rt003_admin_key';
 
@@ -30,7 +31,7 @@
         ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
         : 'border-slate-200 bg-white text-slate-900';
     const el = document.createElement('div');
-    el.className = `toast mb-3 rounded-2xl border p-4 ${classes}`;
+    el.className = `toast mb-3 rounded-2xl border p-4 shadow-lg ${classes}`;
     el.textContent = message;
     wrap.appendChild(el);
     setTimeout(() => el.remove(), 4500);
@@ -54,7 +55,7 @@
 
   async function request(action, payload = null) {
     const url = getApiUrl();
-    if (!url) throw new Error('URL Google Apps Script belum dikonfigurasi.');
+    if (!url) throw new Error('Sistem backend belum dikonfigurasi.');
 
     if (action === 'bootstrap') {
       const response = await fetch(`${url}?action=bootstrap`, { method: 'GET', cache: 'no-store' });
@@ -76,10 +77,10 @@
 
   function renderAnnouncements() {
     const list = $('#admin-announcement-list');
-    $('#announcement-total').textContent = `${state.announcements.length} item`;
+    $('#announcement-total').textContent = `${state.announcements.length} Item`;
 
     if (!state.announcements.length) {
-      list.innerHTML = '<div class="p-8 text-center text-slate-500">Belum ada pengumuman.</div>';
+      list.innerHTML = '<div class="p-8 text-center text-slate-500 font-medium">Belum ada pengumuman yang tersimpan.</div>';
       return;
     }
 
@@ -87,24 +88,24 @@
       <div class="p-5 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <div>
           <div class="flex flex-wrap items-center gap-2">
-            <span class="px-2 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold">${escapeHtml(item.category || 'Umum')}</span>
-            ${item.priority === 'high' ? '<span class="px-2 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-semibold">Penting</span>' : ''}
+            <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">${escapeHtml(item.category || 'Umum')}</span>
+            ${item.priority === 'high' ? '<span class="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-700 text-xs font-bold">PENTING</span>' : ''}
           </div>
-          <h3 class="font-black mt-2">${escapeHtml(item.title)}</h3>
-          <p class="text-sm text-slate-600 mt-1 whitespace-pre-line">${escapeHtml(item.content)}</p>
-          <p class="text-xs text-slate-400 mt-2">${escapeHtml(formatDate(item.date || item.created_at))}</p>
+          <h3 class="font-black text-slate-900 text-base mt-2">${escapeHtml(item.title)}</h3>
+          <p class="text-sm text-slate-600 mt-1 whitespace-pre-line leading-relaxed">${escapeHtml(item.content)}</p>
+          <p class="text-xs text-slate-400 mt-2 font-medium">Dipublikasikan: ${escapeHtml(formatDate(item.date || item.created_at))}</p>
         </div>
-        <button data-delete-announcement="${escapeHtml(item.id)}" class="shrink-0 px-3 py-2 rounded-xl border border-rose-200 text-rose-700 font-semibold hover:bg-rose-50">Hapus</button>
+        <button data-delete-announcement="${escapeHtml(item.id)}" class="shrink-0 px-3.5 py-2 rounded-xl border border-rose-200 text-rose-700 font-bold hover:bg-rose-50 text-xs transition-colors">Hapus Pengumuman</button>
       </div>
     `).join('');
   }
 
   function renderSchedules() {
     const list = $('#admin-schedule-list');
-    $('#schedule-total').textContent = `${state.schedules.length} item`;
+    $('#schedule-total').textContent = `${state.schedules.length} Item`;
 
     if (!state.schedules.length) {
-      list.innerHTML = '<div class="p-8 text-center text-slate-500">Belum ada agenda kegiatan.</div>';
+      list.innerHTML = '<div class="p-8 text-center text-slate-500 font-medium">Belum ada agenda atau jadwal ronda tersimpan.</div>';
       return;
     }
 
@@ -112,24 +113,24 @@
       <div class="p-5 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <div>
           <div class="flex flex-wrap items-center gap-2">
-            <span class="px-2 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-semibold">${escapeHtml(item.type || 'Kegiatan')}</span>
+            <span class="px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800 text-xs font-bold">${escapeHtml(item.type || 'Kegiatan')}</span>
           </div>
-          <h3 class="font-black mt-2">${escapeHtml(item.title)}</h3>
-          <p class="text-sm text-slate-600 mt-1">🗓️ ${escapeHtml(formatDate(item.date))} ${item.time ? `· ⏰ ${escapeHtml(formatTime(item.time))}` : ''}</p>
-          <p class="text-sm text-slate-500 mt-0.5">📍 ${escapeHtml(item.location || 'Lokasi menyusul')}</p>
-          ${item.description ? `<p class="text-sm text-slate-600 mt-2">${escapeHtml(item.description)}</p>` : ''}
+          <h3 class="font-black text-slate-900 text-base mt-2">${escapeHtml(item.title)}</h3>
+          <p class="text-sm font-semibold text-slate-700 mt-1">🗓️ ${escapeHtml(formatDate(item.date))} ${item.time ? `· ⏰ ${escapeHtml(formatTime(item.time))}` : ''}</p>
+          <p class="text-xs text-slate-500 mt-1 font-medium">📍 ${escapeHtml(item.location || 'Lokasi menyusul')}</p>
+          ${item.description ? `<p class="text-sm text-slate-600 mt-2 leading-relaxed">${escapeHtml(item.description)}</p>` : ''}
         </div>
-        <button data-delete-schedule="${escapeHtml(item.id)}" class="shrink-0 px-3 py-2 rounded-xl border border-rose-200 text-rose-700 font-semibold hover:bg-rose-50">Hapus</button>
+        <button data-delete-schedule="${escapeHtml(item.id)}" class="shrink-0 px-3.5 py-2 rounded-xl border border-rose-200 text-rose-700 font-bold hover:bg-rose-50 text-xs transition-colors">Hapus Agenda</button>
       </div>
     `).join('');
   }
 
   function renderFinance() {
     const table = $('#admin-finance-table');
-    $('#finance-total').textContent = `${state.finance.length} transaksi`;
+    $('#finance-total').textContent = `${state.finance.length} Transaksi`;
 
     if (!state.finance.length) {
-      table.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-slate-500">Belum ada transaksi.</td></tr>';
+      table.innerHTML = '<tr><td colspan="5" class="px-5 py-8 text-center text-slate-500 font-medium">Belum ada data transaksi keuangan tersimpan.</td></tr>';
       return;
     }
 
@@ -137,12 +138,12 @@
       const positive = item.type !== 'expense';
       return `
         <tr class="border-t border-slate-100">
-          <td class="px-5 py-4 text-slate-500">${escapeHtml(formatDate(item.date))}</td>
-          <td class="px-5 py-4 font-semibold">${escapeHtml(item.description)}</td>
-          <td class="px-5 py-4">${positive ? '<span class="text-emerald-700 font-semibold">Pemasukan</span>' : '<span class="text-rose-700 font-semibold">Pengeluaran</span>'}</td>
-          <td class="px-5 py-4 text-right font-bold">${escapeHtml(rupiah.format(Number(item.amount) || 0))}</td>
+          <td class="px-5 py-4 text-slate-500 font-medium">${escapeHtml(formatDate(item.date))}</td>
+          <td class="px-5 py-4 font-bold text-slate-800">${escapeHtml(item.description)}</td>
+          <td class="px-5 py-4">${positive ? '<span class="text-emerald-700 font-bold">Pemasukan</span>' : '<span class="text-rose-700 font-bold">Pengeluaran</span>'}</td>
+          <td class="px-5 py-4 text-right font-black">${escapeHtml(rupiah.format(Number(item.amount) || 0))}</td>
           <td class="px-5 py-4 text-right">
-            <button data-delete-finance="${escapeHtml(item.id)}" class="px-3 py-2 rounded-xl border border-rose-200 text-rose-700 font-semibold hover:bg-rose-50">Hapus</button>
+            <button data-delete-finance="${escapeHtml(item.id)}" class="px-3.5 py-1.5 rounded-xl border border-rose-200 text-rose-700 font-bold hover:bg-rose-50 text-xs transition-colors">Hapus</button>
           </td>
         </tr>
       `;
@@ -153,7 +154,7 @@
     renderAnnouncements();
     renderSchedules();
     renderFinance();
-    $('#admin-status').textContent = `Terhubung · ${new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date())}`;
+    $('#admin-status').textContent = `Terhubung dengan Pusat Sistem Data · ${new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date())}`;
   }
 
   async function refresh() {
@@ -166,7 +167,7 @@
       };
       render();
     } catch (error) {
-      showToast(`Gagal memuat data: ${error.message}`, 'error');
+      showToast(`Gagal memperbarui data: ${error.message}`, 'error');
     }
   }
 
@@ -175,7 +176,7 @@
     $('#admin-app').classList.add('hidden');
     if (message) {
       $('#login-message').textContent = message;
-      $('#login-message').className = 'text-sm mt-4 text-rose-700';
+      $('#login-message').className = 'text-sm mt-4 text-center font-bold text-rose-700';
       $('#login-message').classList.remove('hidden');
     }
   }
@@ -183,21 +184,22 @@
   async function login() {
     const key = $('#admin-key').value.trim();
     if (!key) {
-      showLogin('Kunci admin wajib diisi.');
+      showLogin('Silakan masukkan kata sandi pengurus terlebih dahulu.');
       return;
     }
 
     sessionStorage.setItem(SESSION_KEY, key);
     try {
-      await request('bootstrap');
+      // Menggunakan request POST 'verifyKey' agar password wajib divalidasi ketat oleh backend
+      await request('verifyKey');
       $('#login-card').classList.add('hidden');
       $('#admin-app').classList.remove('hidden');
       $('#login-message').classList.add('hidden');
       await refresh();
-      showToast('Login berhasil.', 'success');
+      showToast('Berhasil masuk ke panel pengurus.', 'success');
     } catch (error) {
       sessionStorage.removeItem(SESSION_KEY);
-      showLogin(`Login gagal: ${error.message}`);
+      showLogin(`Kata sandi pengurus tidak sesuai.`);
     }
   }
 
@@ -205,7 +207,7 @@
     sessionStorage.removeItem(SESSION_KEY);
     $('#admin-key').value = '';
     showLogin();
-    showToast('Anda sudah keluar.', 'info');
+    showToast('Anda telah keluar dari panel pengurus.', 'info');
   }
 
   async function handleAnnouncementSubmit(event) {
@@ -224,7 +226,7 @@
     try {
       await request('addAnnouncement', payload);
       form.reset();
-      showToast('Pengumuman berhasil dipublikasikan.', 'success');
+      showToast('Pengumuman berhasil dipublikasikan!', 'success');
       await refresh();
     } catch (error) {
       showToast(`Gagal menyimpan pengumuman: ${error.message}`, 'error');
@@ -249,7 +251,7 @@
     try {
       await request('addSchedule', payload);
       form.reset();
-      showToast('Agenda kegiatan berhasil disimpan.', 'success');
+      showToast('Agenda kegiatan berhasil disimpan!', 'success');
       await refresh();
     } catch (error) {
       showToast(`Gagal menyimpan agenda: ${error.message}`, 'error');
@@ -275,7 +277,7 @@
       await request('addFinance', payload);
       form.reset();
       $('#finance-form [name="category"]').value = 'Kas RT';
-      showToast('Transaksi kas berhasil disimpan.', 'success');
+      showToast('Transaksi kas berhasil dicatat!', 'success');
       await refresh();
     } catch (error) {
       showToast(`Gagal menyimpan transaksi: ${error.message}`, 'error');
@@ -284,7 +286,7 @@
 
   async function deleteItem(action, id, label) {
     if (!id) return;
-    if (!window.confirm(`Hapus ${label} ini? Tindakan tidak dapat dibatalkan.`)) return;
+    if (!window.confirm(`Konfirmasi: Apakah Anda yakin ingin menghapus ${label} ini?`)) return;
 
     try {
       await request(action, { id });
@@ -295,25 +297,28 @@
     }
   }
 
-  function setupConnectionPanel() {
-    const panel = $('#connection-panel');
-    $('#api-url').value = getApiUrl();
+  // Admin Tab Switcher Logic
+  function setupAdminTabs() {
+    const tabs = [
+      { btn: $('#tab-btn-announcement'), content: $('#tab-content-announcement') },
+      { btn: $('#tab-btn-schedule'), content: $('#tab-content-schedule') },
+      { btn: $('#tab-btn-finance'), content: $('#tab-content-finance') }
+    ];
 
-    $('#connection-toggle').addEventListener('click', () => panel.classList.toggle('hidden'));
-    $('#save-api-btn').addEventListener('click', () => {
-      const value = $('#api-url').value.trim().replace(/\/+$/, '');
-      if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec$/.test(value)) {
-        showToast('Masukkan URL Web App Google Apps Script yang berakhiran /exec.', 'error');
-        return;
-      }
-      localStorage.setItem(API_URL_KEY, value);
-      showToast('URL API tersimpan di browser ini.', 'success');
-    });
-
-    $('#clear-api-btn').addEventListener('click', () => {
-      localStorage.removeItem(API_URL_KEY);
-      $('#api-url').value = DEFAULT_API_URL;
-      showToast('URL API lokal dihapus.', 'info');
+    tabs.forEach(({ btn, content }) => {
+      if (!btn) return;
+      btn.addEventListener('click', () => {
+        tabs.forEach(t => {
+          if (t.btn && t.content) {
+            t.btn.classList.remove('border-sky-600', 'text-sky-600');
+            t.btn.classList.add('border-transparent', 'text-slate-500');
+            t.content.classList.add('hidden');
+          }
+        });
+        btn.classList.remove('border-transparent', 'text-slate-500');
+        btn.classList.add('border-sky-600', 'text-sky-600');
+        content.classList.remove('hidden');
+      });
     });
   }
 
@@ -343,11 +348,11 @@
       if (button) deleteItem('deleteFinance', button.dataset.deleteFinance, 'transaksi');
     });
 
-    setupConnectionPanel();
+    setupAdminTabs();
 
     const savedKey = getAdminKey();
     if (savedKey) {
-      request('bootstrap')
+      request('verifyKey')
         .then(() => {
           $('#login-card').classList.add('hidden');
           $('#admin-app').classList.remove('hidden');
