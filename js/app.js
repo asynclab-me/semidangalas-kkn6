@@ -1,48 +1,12 @@
-/* Mading Digital RT 003 / RW 002
- * Public frontend: data loading from Google Apps Script Web App.
- *
- * Configure GAS URL in one of two ways:
- * 1) Set DEFAULT_API_URL below for a fixed deployment.
- * 2) Save a URL from the admin page; the URL is stored in localStorage.
+/* Portal Informasi Warga RT 003 / RW 002 Desa Semidang Alas
+ * Client-Side JavaScript for Public Portal
  */
 (() => {
   'use strict';
 
-  const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbwxXe6GzAb2vTgmjrRCmyTFrwq9JnSi-L3IWYVYXU2OENRbFH84iE2Ex6golr1fEb9DSA/exec';
+  // Sesuai konfigurasi deployment final, salin Web App URL GAS Anda ke sini:
+  const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbyKajpK_rDY6vETogHZWFahwjYQ5z_b-fOW6xO2NZ-_6fhXhSSmvSJB6eISP7pkZIKGvA/exec'; 
   const STORAGE_KEY = 'mading_rt003_api_url';
-
-  const demoData = {
-    announcements: [
-      {
-        id: 'demo-a1',
-        title: 'Gotong royong lingkungan',
-        content: 'Warga dimohon hadir pada hari Minggu pukul 07.00 WIB. Membawa alat kebersihan seperlunya.',
-        category: 'Kebersihan',
-        priority: 'high',
-        date: new Date().toISOString()
-      },
-      {
-        id: 'demo-a2',
-        title: 'Pembayaran iuran bulanan',
-        content: 'Iuran warga dapat disampaikan kepada pengurus RT sesuai jadwal yang telah disepakati bersama.',
-        category: 'Umum',
-        priority: 'normal',
-        date: new Date().toISOString()
-      }
-    ],
-    schedules: [
-      {
-        id: 'demo-s1',
-        title: 'Ronda malam',
-        date: new Date().toISOString().slice(0, 10),
-        time: '22:00',
-        location: 'Pos ronda RT 003',
-        type: 'Keamanan',
-        description: 'Jadwal ronda malam sesuai pembagian kelompok warga.'
-      }
-    ],
-    finance: []
-  };
 
   const $ = (selector) => document.querySelector(selector);
   const rupiah = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 });
@@ -60,7 +24,7 @@
         ? 'border-emerald-200 bg-emerald-50 text-emerald-900'
         : 'border-slate-200 bg-white text-slate-900';
     const el = document.createElement('div');
-    el.className = `toast mb-3 rounded-2xl border p-4 ${color}`;
+    el.className = `toast mb-3 rounded-2xl border p-4 shadow-lg ${color}`;
     el.textContent = message;
     wrap.appendChild(el);
     setTimeout(() => el.remove(), 4200);
@@ -86,20 +50,22 @@
     const el = $('#api-status');
     if (!el) return;
     el.textContent = text;
-    el.className = `mt-1 text-lg font-bold ${tone === 'error' ? 'text-rose-700' : tone === 'demo' ? 'text-amber-700' : 'text-slate-900'}`;
+    el.className = `mt-0.5 text-base font-bold ${tone === 'error' ? 'text-rose-600' : 'text-emerald-700'}`;
   }
 
   async function apiGet() {
     const url = getApiUrl();
-    if (!url) return { ...demoData, _mode: 'demo' };
+    if (!url) {
+      return { announcements: [], schedules: [], finance: [] };
+    }
 
     const response = await fetch(`${url}?action=bootstrap`, {
       method: 'GET',
       cache: 'no-store'
     });
-    if (!response.ok) throw new Error(`GAS HTTP ${response.status}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const payload = await response.json();
-    if (!payload.ok) throw new Error(payload.error || 'API mengembalikan kesalahan.');
+    if (!payload.ok) throw new Error(payload.error || 'Terjadi kesalahan sistem.');
     return payload.data;
   }
 
@@ -107,28 +73,36 @@
     const list = $('#announcement-list');
     const label = $('#announcement-count-label');
     if (!list) return;
-    label.textContent = `${items.length} pengumuman`;
+    label.textContent = `${items.length} Pengumuman Aktif`;
 
     if (!items.length) {
-      list.innerHTML = '<div class="md:col-span-2 lg:col-span-3 bg-white border border-dashed border-slate-300 rounded-2xl p-8 text-center text-slate-500">Belum ada pengumuman.</div>';
+      list.innerHTML = `
+        <div class="md:col-span-2 lg:col-span-3 bg-white border border-slate-200/80 rounded-3xl p-10 text-center shadow-soft">
+          <div class="w-12 h-12 bg-slate-100 text-slate-400 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl font-bold">📢</div>
+          <h3 class="font-bold text-slate-800">Belum Ada Pengumuman</h3>
+          <p class="text-xs text-slate-500 mt-1">Belum ada pengumuman yang dipublikasikan oleh Pengurus RT 003 / RW 002.</p>
+        </div>
+      `;
       return;
     }
 
     list.innerHTML = items.slice(0, 9).map((item) => {
       const priorityClass = item.priority === 'high'
-        ? 'bg-rose-50 text-rose-700 border-rose-100'
-        : 'bg-sky-50 text-sky-700 border-sky-100';
+        ? 'bg-rose-50 text-rose-700 border-rose-200'
+        : 'bg-sky-50 text-sky-700 border-sky-200';
 
       return `
-        <article class="bg-white border border-slate-200 rounded-2xl p-5 shadow-soft card-hover">
-          <div class="flex items-start justify-between gap-3">
-            <span class="inline-flex px-2.5 py-1 rounded-full border text-xs font-semibold ${priorityClass}">
-              ${escapeHtml(item.priority === 'high' ? 'Penting' : item.category || 'Umum')}
-            </span>
-            <time class="text-xs text-slate-400">${escapeHtml(formatDate(item.date || item.created_at))}</time>
+        <article class="bg-white border border-slate-200/80 rounded-2xl p-6 shadow-soft card-hover flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between gap-3 mb-3">
+              <span class="inline-flex px-3 py-1 rounded-full border text-xs font-bold ${priorityClass}">
+                ${escapeHtml(item.priority === 'high' ? 'PENTING' : item.category || 'Umum')}
+              </span>
+              <time class="text-xs font-medium text-slate-400">${escapeHtml(formatDate(item.date || item.created_at))}</time>
+            </div>
+            <h3 class="text-lg font-black text-slate-900 leading-snug">${escapeHtml(item.title)}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed mt-2.5 whitespace-pre-line">${escapeHtml(item.content)}</p>
           </div>
-          <h3 class="text-lg font-black mt-4">${escapeHtml(item.title)}</h3>
-          <p class="text-sm text-slate-600 leading-6 mt-2 whitespace-pre-line">${escapeHtml(item.content)}</p>
         </article>
       `;
     }).join('');
@@ -139,21 +113,27 @@
     if (!list) return;
 
     if (!items.length) {
-      list.innerHTML = '<div class="bg-white border border-dashed border-slate-300 rounded-2xl p-8 text-center text-slate-500">Belum ada agenda kegiatan.</div>';
+      list.innerHTML = `
+        <div class="bg-white border border-slate-200/80 rounded-3xl p-10 text-center shadow-soft">
+          <div class="w-12 h-12 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-xl font-bold">🗓️</div>
+          <h3 class="font-bold text-slate-800">Belum Ada Jadwal Kegiatan</h3>
+          <p class="text-xs text-slate-500 mt-1">Saat ini belum ada agenda kegiatan atau jadwal ronda malam mendatang.</p>
+        </div>
+      `;
       return;
     }
 
     list.innerHTML = items.slice(0, 12).map((item) => `
-      <article class="bg-white border border-slate-200 rounded-2xl p-5 shadow-soft card-hover flex flex-col sm:flex-row gap-5 sm:items-center">
-        <div class="min-w-[100px] rounded-2xl bg-teal-50 border border-teal-100 px-4 py-3 text-center">
-          <p class="text-xs font-semibold text-teal-700">${escapeHtml(item.type || 'Kegiatan')}</p>
-          <p class="text-sm font-black text-teal-900 mt-1">${escapeHtml(formatDate(item.date))}</p>
-          <p class="text-xs text-teal-700 mt-1">${escapeHtml(formatTime(item.time))}</p>
+      <article class="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-soft card-hover flex flex-col sm:flex-row gap-5 sm:items-center">
+        <div class="min-w-[120px] rounded-2xl bg-teal-50/80 border border-teal-100 p-3.5 text-center shrink-0">
+          <p class="text-xs font-bold uppercase tracking-wider text-teal-700">${escapeHtml(item.type || 'Kegiatan')}</p>
+          <p class="text-sm font-black text-teal-950 mt-1">${escapeHtml(formatDate(item.date))}</p>
+          <p class="text-xs font-semibold text-teal-700 mt-0.5">${escapeHtml(formatTime(item.time))}</p>
         </div>
         <div class="flex-1">
-          <h3 class="text-lg font-black">${escapeHtml(item.title)}</h3>
-          <p class="text-sm text-slate-500 mt-1">${escapeHtml(item.location || 'Lokasi menyusul')}</p>
-          <p class="text-sm text-slate-600 mt-2 leading-6">${escapeHtml(item.description || '')}</p>
+          <h3 class="text-lg font-black text-slate-900">${escapeHtml(item.title)}</h3>
+          <p class="text-xs font-semibold text-slate-500 mt-1">📍 ${escapeHtml(item.location || 'Lokasi menyusul')}</p>
+          ${item.description ? `<p class="text-sm text-slate-600 mt-2 leading-relaxed">${escapeHtml(item.description)}</p>` : ''}
         </div>
       </article>
     `).join('');
@@ -174,8 +154,15 @@
 
     const table = $('#finance-table');
     if (!table) return;
+
     if (!items.length) {
-      table.innerHTML = '<tr><td colspan="4" class="px-5 py-8 text-center text-slate-500">Belum ada transaksi yang dipublikasikan.</td></tr>';
+      table.innerHTML = `
+        <tr>
+          <td colspan="4" class="px-5 py-10 text-center text-slate-500">
+            Belum ada catatan transaksi keuangan yang dipublikasikan.
+          </td>
+        </tr>
+      `;
       return;
     }
 
@@ -183,11 +170,13 @@
       const amount = Number(item.amount) || 0;
       const positive = item.type !== 'expense';
       return `
-        <tr class="border-t border-slate-100">
-          <td class="px-5 py-4 text-slate-500">${escapeHtml(formatDate(item.date))}</td>
-          <td class="px-5 py-4 font-semibold text-slate-800">${escapeHtml(item.description)}</td>
-          <td class="px-5 py-4 text-slate-500">${escapeHtml(item.category || 'Kas RT')}</td>
-          <td class="px-5 py-4 text-right font-bold ${positive ? 'text-emerald-700' : 'text-rose-700'}">${positive ? '+' : '-'}${escapeHtml(rupiah.format(amount))}</td>
+        <tr class="border-t border-slate-100 hover:bg-slate-50/60 transition-colors">
+          <td class="px-5 py-4 text-slate-500 font-medium">${escapeHtml(formatDate(item.date))}</td>
+          <td class="px-5 py-4 font-bold text-slate-800">${escapeHtml(item.description)}</td>
+          <td class="px-5 py-4 text-slate-500 font-medium">${escapeHtml(item.category || 'Kas RT')}</td>
+          <td class="px-5 py-4 text-right font-black ${positive ? 'text-emerald-700' : 'text-rose-700'}">
+            ${positive ? '+' : '-'}${escapeHtml(rupiah.format(amount))}
+          </td>
         </tr>
       `;
     }).join('');
@@ -205,24 +194,18 @@
     $('#stat-announcements').textContent = announcements.length;
     $('#stat-schedules').textContent = schedules.length;
     $('#stat-finance').textContent = finance.length;
-    $('#last-updated').textContent = `Diperbarui ${new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date())}`;
+    $('#last-updated').textContent = `Terakhir diperbarui: ${new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date())}`;
   }
 
   async function load() {
     try {
-      const apiUrl = getApiUrl();
       const data = await apiGet();
       render(data);
-      if (apiUrl) {
-        setStatus('Terhubung ke Google Apps Script', 'normal');
-      } else {
-        setStatus('Mode demo lokal', 'demo');
-        showToast('API GAS belum dikonfigurasi. Menampilkan data demo.', 'info');
-      }
+      setStatus('Aktif Terhubung', 'normal');
     } catch (error) {
-      setStatus('Koneksi API gagal', 'error');
-      render(demoData);
-      showToast(`Gagal mengambil data dari API: ${error.message}`, 'error');
+      setStatus('Gangguan Koneksi Sistem', 'error');
+      render({ announcements: [], schedules: [], finance: [] });
+      showToast('Gagal memuat informasi terbaru dari server.', 'error');
     }
   }
 
