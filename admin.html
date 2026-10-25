@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Mading Digital — RT 003 / RW 002</title>
-  <meta name="description" content="Halaman admin untuk mengelola pengumuman, kegiatan, dan transparansi keuangan Mading Digital RT 003 / RW 002.">
+  <title>Panel Pengurus — Portal Informasi Warga Semidang Alas</title>
+  <meta name="description" content="Panel Pengurus Resmi Portal Informasi Warga RT 003 / RW 002 Desa Semidang Alas.">
   <link rel="icon" href="public/favicon.ico">
   <link rel="stylesheet" href="css/style.css">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -18,219 +18,239 @@
     }
   </script>
 </head>
-<body>
-  <div class="min-h-screen bg-slate-100">
-    <header class="bg-slate-950 text-white sticky top-0 z-40">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <img src="public/logo-pagaralam.png" alt="Logo komunitas" class="w-10 h-10 rounded-xl bg-white object-cover">
-          <div>
-            <p class="font-bold">Admin Mading Digital</p>
-            <p class="text-xs text-slate-400">RT 003 / RW 002 · Desa Semidang Alas</p>
-          </div>
+<body class="bg-slate-100 text-slate-900 min-h-screen antialiased">
+  
+  <header class="bg-slate-950 text-white sticky top-0 z-40 border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <img src="public/logo-pagaralam.png" alt="Logo Komunitas" class="w-9 h-9 rounded-xl bg-white object-cover">
+        <div>
+          <p class="font-extrabold text-sm sm:text-base leading-tight">Panel Pengurus RT 003 / RW 002</p>
+          <p class="text-xs text-slate-400">Portal Informasi Warga Semidang Alas</p>
         </div>
-        <a href="index.html" class="text-sm px-4 py-2 rounded-xl bg-white/10 border border-white/10 hover:bg-white/15">Lihat mading</a>
       </div>
-    </header>
+      <a href="index.html" class="text-xs sm:text-sm px-4 py-2 rounded-xl bg-white/10 border border-white/15 hover:bg-white/20 font-semibold transition-all">Lihat Website Portal</a>
+    </div>
+  </header>
 
-    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
-      <section id="login-card" class="max-w-md mx-auto bg-white border border-slate-200 rounded-3xl shadow-soft p-6 sm:p-8">
-        <div class="mb-6">
-          <p class="text-sm font-semibold text-blue-600">Akses pengurus</p>
-          <h1 class="text-2xl font-black mt-1">Masuk ke panel admin</h1>
-          <p class="text-sm text-slate-500 mt-2 leading-6">Masukkan kunci admin yang sama dengan <code>ADMIN_KEY</code> pada Script Properties Google Apps Script.</p>
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    
+    <!-- Login Card -->
+    <section id="login-card" class="max-w-md mx-auto bg-white border border-slate-200/80 rounded-3xl shadow-soft p-6 sm:p-8">
+      <div class="mb-6 text-center">
+        <div class="w-14 h-14 mx-auto mb-4 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-700 text-2xl font-black">
+          🔑
         </div>
-        <label class="block text-sm font-semibold text-slate-700">Kunci admin</label>
-        <input id="admin-key" type="password" autocomplete="current-password" class="mt-2 w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-4 focus:ring-blue-100" placeholder="Masukkan kunci admin">
-        <button id="login-btn" class="w-full mt-4 px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700">Masuk</button>
-        <button id="connection-toggle" class="w-full mt-3 px-4 py-3 rounded-xl border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50">Pengaturan koneksi API</button>
-        <div id="connection-panel" class="hidden mt-4 rounded-2xl bg-slate-50 border border-slate-200 p-4">
-          <label class="block text-sm font-semibold text-slate-700">URL Web App Google Apps Script</label>
-          <input id="api-url" type="url" inputmode="url" class="mt-2 w-full px-3 py-2.5 rounded-xl border border-slate-300" placeholder="https://script.google.com/macros/s/.../exec">
-          <div class="flex gap-2 mt-3">
-            <button id="save-api-btn" class="flex-1 px-3 py-2.5 rounded-xl bg-slate-900 text-white font-semibold">Simpan</button>
-            <button id="clear-api-btn" class="px-3 py-2.5 rounded-xl border border-slate-300 font-semibold">Hapus</button>
+        <h1 class="text-2xl font-black text-slate-900">Masuk Panel Pengurus</h1>
+        <p class="text-xs sm:text-sm text-slate-500 mt-1.5 leading-relaxed">
+          Masukkan kata sandi pengurus untuk mengelola pengumuman, agenda kegiatan, dan transaksi kas warga.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label for="admin-key" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kata Sandi Pengurus</label>
+          <input id="admin-key" type="password" autocomplete="current-password" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-4 focus:ring-sky-100 focus:border-sky-500 transition-all text-slate-900 placeholder:text-slate-400" placeholder="Masukkan kata sandi rahasia">
+        </div>
+        <button id="login-btn" class="w-full px-4 py-3.5 rounded-xl bg-slate-900 text-white font-bold hover:bg-sky-700 active:scale-[0.99] transition-all shadow-md">
+          Masuk Sekarang
+        </button>
+      </div>
+      <p id="login-message" class="text-sm mt-4 text-center font-medium hidden"></p>
+    </section>
+
+    <!-- Admin App Content -->
+    <section id="admin-app" class="hidden space-y-8">
+      
+      <!-- Top Bar / Admin Status -->
+      <div class="bg-white border border-slate-200/80 rounded-3xl p-6 shadow-soft flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <span class="text-xs font-extrabold text-sky-600 uppercase tracking-wider">Dashboard Pengurus</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-0.5">Kelola Informasi Warga</h1>
+          <p id="admin-status" class="text-xs sm:text-sm text-slate-500 mt-1">Status: Memuat data...</p>
+        </div>
+        <div class="flex items-center gap-3 shrink-0">
+          <button id="refresh-btn" class="px-4 py-2.5 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 font-bold hover:bg-slate-200 transition-all text-xs sm:text-sm">
+            🔄 Muat Ulang Data
+          </button>
+          <button id="logout-btn" class="px-4 py-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 font-bold hover:bg-rose-100 transition-all text-xs sm:text-sm">
+            Keluar Panel
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs for Admin -->
+      <div class="flex border-b border-slate-200 overflow-x-auto gap-2">
+        <button id="tab-btn-announcement" class="px-5 py-3 font-bold text-sm border-b-2 border-sky-600 text-sky-600 whitespace-nowrap focus:outline-none">
+          📢 Kelola Pengumuman
+        </button>
+        <button id="tab-btn-schedule" class="px-5 py-3 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap focus:outline-none">
+          🗓️ Agenda & Ronda
+        </button>
+        <button id="tab-btn-finance" class="px-5 py-3 font-bold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-800 whitespace-nowrap focus:outline-none">
+          💰 Transparansi Kas
+        </button>
+      </div>
+
+      <!-- TAB 1: PENGUMUMAN -->
+      <div id="tab-content-announcement" class="space-y-8">
+        <section class="bg-white border border-slate-200/80 rounded-3xl shadow-soft p-6">
+          <div class="mb-5 pb-3 border-b border-slate-100">
+            <h2 class="text-xl font-black text-slate-900">Tambah Pengumuman Baru</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Pengumuman akan langsung tampil pada halaman depan portal warga.</p>
           </div>
-          <p class="text-xs text-slate-500 mt-3 leading-5">URL disimpan hanya di browser ini. Untuk publikasi utama, Anda juga dapat mengisi <code>DEFAULT_API_URL</code> di <code>js/app.js</code> dan <code>js/admin.js</code>.</p>
-        </div>
-        <p id="login-message" class="text-sm mt-4 hidden"></p>
-      </section>
-
-      <section id="admin-app" class="hidden space-y-8">
-        <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4">
-          <div>
-            <p class="text-sm font-semibold text-blue-600">Dashboard</p>
-            <h1 class="text-3xl sm:text-4xl font-black mt-1">Kelola informasi warga</h1>
-            <p id="admin-status" class="text-sm text-slate-500 mt-2">Memuat data…</p>
-          </div>
-          <div class="flex gap-2">
-            <button id="refresh-btn" class="px-4 py-2.5 rounded-xl bg-white border border-slate-200 font-semibold hover:bg-slate-50">Muat ulang</button>
-            <button id="logout-btn" class="px-4 py-2.5 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800">Keluar</button>
-          </div>
-        </div>
-
-        <div class="grid lg:grid-cols-3 gap-6">
-          <!-- Form Pengumuman -->
-          <section class="bg-white border border-slate-200 rounded-3xl shadow-soft p-5 sm:p-6">
-            <div class="mb-5">
-              <p class="text-sm font-semibold text-blue-600">Pengumuman</p>
-              <h2 class="text-xl font-black mt-1">Tambah pengumuman</h2>
-            </div>
-            <form id="announcement-form" class="space-y-4">
-              <div>
-                <label class="block text-sm font-semibold">Judul</label>
-                <input name="title" required maxlength="120" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-              </div>
-              <div>
-                <label class="block text-sm font-semibold">Isi</label>
-                <textarea name="content" required maxlength="1000" rows="4" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300"></textarea>
-              </div>
-              <div class="grid sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-sm font-semibold">Kategori</label>
-                  <select name="category" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-                    <option>Umum</option>
-                    <option>Penting</option>
-                    <option>Kemasyarakatan</option>
-                    <option>Keamanan</option>
-                    <option>Kebersihan</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-sm font-semibold">Prioritas</label>
-                  <select name="priority" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-                    <option value="normal">Normal</option>
-                    <option value="high">Penting</option>
-                  </select>
-                </div>
-              </div>
-              <button class="w-full px-4 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700">Publikasikan</button>
-            </form>
-          </section>
-
-          <!-- Form Kegiatan -->
-          <section class="bg-white border border-slate-200 rounded-3xl shadow-soft p-5 sm:p-6">
-            <div class="mb-5">
-              <p class="text-sm font-semibold text-teal-600">Kegiatan</p>
-              <h2 class="text-xl font-black mt-1">Tambah jadwal & ronda</h2>
-            </div>
-            <form id="schedule-form" class="space-y-4">
-              <div>
-                <label class="block text-sm font-semibold">Judul Agenda</label>
-                <input name="title" required maxlength="120" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300" placeholder="Contoh: Ronda Malam Kelompok A">
-              </div>
-              <div class="grid sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-sm font-semibold">Tanggal</label>
-                  <input name="date" type="date" required class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-                </div>
-                <div>
-                  <label class="block text-sm font-semibold">Jam</label>
-                  <input name="time" type="time" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-                </div>
-              </div>
-              <div class="grid sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-sm font-semibold">Lokasi</label>
-                  <input name="location" maxlength="120" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300" placeholder="Pos ronda RT 003">
-                </div>
-                <div>
-                  <label class="block text-sm font-semibold">Jenis</label>
-                  <select name="type" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-                    <option value="Keamanan">Keamanan</option>
-                    <option value="Kebersihan">Kebersihan</option>
-                    <option value="Rapat">Rapat</option>
-                    <option value="Kegiatan">Kegiatan</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label class="block text-sm font-semibold">Keterangan (opsional)</label>
-                <input name="description" maxlength="200" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300" placeholder="Catatan tambahan">
-              </div>
-              <button class="w-full px-4 py-3 rounded-xl bg-teal-600 text-white font-semibold hover:bg-teal-700">Simpan agenda</button>
-            </form>
-          </section>
-
-          <!-- Form Keuangan -->
-          <section class="bg-white border border-slate-200 rounded-3xl shadow-soft p-5 sm:p-6">
-            <div class="mb-5">
-              <p class="text-sm font-semibold text-emerald-600">Keuangan</p>
-              <h2 class="text-xl font-black mt-1">Tambah transaksi kas</h2>
-            </div>
-            <form id="finance-form" class="space-y-4">
-              <div class="grid sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-sm font-semibold">Tanggal</label>
-                  <input name="date" type="date" required class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-                </div>
-                <div>
-                  <label class="block text-sm font-semibold">Jenis</label>
-                  <select name="type" required class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-                    <option value="income">Pemasukan</option>
-                    <option value="expense">Pengeluaran</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label class="block text-sm font-semibold">Keterangan</label>
-                <input name="description" required maxlength="160" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-              </div>
-              <div class="grid sm:grid-cols-2 gap-3">
-                <div>
-                  <label class="block text-sm font-semibold">Nominal (Rp)</label>
-                  <input name="amount" type="number" min="0" step="1" required class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-                </div>
-                <div>
-                  <label class="block text-sm font-semibold">Kategori</label>
-                  <input name="category" maxlength="80" value="Kas RT" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-                </div>
-              </div>
-              <div>
-                <label class="block text-sm font-semibold">Catatan (opsional)</label>
-                <input name="note" maxlength="200" class="mt-1 w-full px-3 py-2.5 rounded-xl border border-slate-300">
-              </div>
-              <button class="w-full px-4 py-3 rounded-xl bg-emerald-600 text-white font-semibold hover:bg-emerald-700">Simpan transaksi</button>
-            </form>
-          </section>
-        </div>
-
-        <!-- Tabel Pengumuman -->
-        <section class="bg-white border border-slate-200 rounded-3xl shadow-soft overflow-hidden">
-          <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <form id="announcement-form" class="space-y-4">
             <div>
-              <p class="text-sm font-semibold text-blue-600">Data publik</p>
-              <h2 class="text-xl font-black mt-1">Pengumuman yang sudah dipublikasikan</h2>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Judul Pengumuman</label>
+              <input name="title" required maxlength="120" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-200" placeholder="Contoh: Gotong Royong Kebersihan Lingkungan">
             </div>
-            <span id="announcement-total" class="text-sm text-slate-500"></span>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Isi Pengumuman</label>
+              <textarea name="content" required maxlength="1000" rows="4" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-200" placeholder="Tuliskan detail pengumuman untuk warga secara lengkap..."></textarea>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori</label>
+                <select name="category" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-200">
+                  <option value="Umum">Umum</option>
+                  <option value="Penting">Penting</option>
+                  <option value="Kemasyarakatan">Kemasyarakatan</option>
+                  <option value="Keamanan">Keamanan</option>
+                  <option value="Kebersihan">Kebersihan</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Tingkat Prioritas</label>
+                <select name="priority" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-sky-200">
+                  <option value="normal">Normal (Biasa)</option>
+                  <option value="high">Penting (Highlight Merah)</option>
+                </select>
+              </div>
+            </div>
+            <button class="w-full sm:w-auto px-6 py-3 rounded-xl bg-sky-600 text-white font-bold hover:bg-sky-700 transition-all shadow-md">
+              Publikasikan Pengumuman
+            </button>
+          </form>
+        </section>
+
+        <section class="bg-white border border-slate-200/80 rounded-3xl shadow-soft overflow-hidden">
+          <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="font-black text-slate-900">Daftar Pengumuman Aktif</h2>
+            <span id="announcement-total" class="text-xs font-semibold px-3 py-1 bg-slate-100 rounded-full text-slate-600">0 Item</span>
           </div>
           <div id="admin-announcement-list" class="divide-y divide-slate-100"></div>
         </section>
+      </div>
 
-        <!-- Tabel Kegiatan -->
-        <section class="bg-white border border-slate-200 rounded-3xl shadow-soft overflow-hidden">
-          <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+      <!-- TAB 2: KEGIATAN & RONDA -->
+      <div id="tab-content-schedule" class="space-y-8 hidden">
+        <section class="bg-white border border-slate-200/80 rounded-3xl shadow-soft p-6">
+          <div class="mb-5 pb-3 border-b border-slate-100">
+            <h2 class="text-xl font-black text-slate-900">Tambah Agenda Kegiatan / Ronda</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Jadwal kegiatan atau jadwal ronda malam warga.</p>
+          </div>
+          <form id="schedule-form" class="space-y-4">
             <div>
-              <p class="text-sm font-semibold text-teal-600">Agenda & Ronda</p>
-              <h2 class="text-xl font-black mt-1">Daftar kegiatan yang sudah dipublikasikan</h2>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Judul Agenda / Kegiatan</label>
+              <input name="title" required maxlength="120" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-200" placeholder="Contoh: Ronda Malam Reguler Kelompok A">
             </div>
-            <span id="schedule-total" class="text-sm text-slate-500"></span>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Tanggal</label>
+                <input name="date" type="date" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-200">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Waktu / Jam (Opsional)</label>
+                <input name="time" type="time" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-200">
+              </div>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Lokasi Pelaksanaan</label>
+                <input name="location" maxlength="120" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-200" placeholder="Contoh: Pos Ronda RT 003">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Jenis Agenda</label>
+                <select name="type" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-200">
+                  <option value="Keamanan">Keamanan (Ronda)</option>
+                  <option value="Kebersihan">Kebersihan (Gotong Royong)</option>
+                  <option value="Rapat">Rapat Warga</option>
+                  <option value="Kegiatan">Kegiatan Umum</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Keterangan / Pesan Tambahan</label>
+              <input name="description" maxlength="200" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-teal-200" placeholder="Contoh: Petugas ronda dimohon membawa peralatan kelengkapan pos.">
+            </div>
+            <button class="w-full sm:w-auto px-6 py-3 rounded-xl bg-teal-600 text-white font-bold hover:bg-teal-700 transition-all shadow-md">
+              Simpan Agenda Kegiatan
+            </button>
+          </form>
+        </section>
+
+        <section class="bg-white border border-slate-200/80 rounded-3xl shadow-soft overflow-hidden">
+          <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="font-black text-slate-900">Daftar Agenda & Ronda Aktif</h2>
+            <span id="schedule-total" class="text-xs font-semibold px-3 py-1 bg-slate-100 rounded-full text-slate-600">0 Item</span>
           </div>
           <div id="admin-schedule-list" class="divide-y divide-slate-100"></div>
         </section>
+      </div>
 
-        <!-- Tabel Keuangan -->
-        <section class="bg-white border border-slate-200 rounded-3xl shadow-soft overflow-hidden">
-          <div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-            <div>
-              <p class="text-sm font-semibold text-emerald-600">Transaksi kas</p>
-              <h2 class="text-xl font-black mt-1">Data keuangan yang sudah dipublikasikan</h2>
+      <!-- TAB 3: TRANSPARANSI KEUANGAN -->
+      <div id="tab-content-finance" class="space-y-8 hidden">
+        <section class="bg-white border border-slate-200/80 rounded-3xl shadow-soft p-6">
+          <div class="mb-5 pb-3 border-b border-slate-100">
+            <h2 class="text-xl font-black text-slate-900">Tambah Transaksi Kas Warga</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Catatan pemasukan atau pengeluaran dana RT 003 / RW 002.</p>
+          </div>
+          <form id="finance-form" class="space-y-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Tanggal Transaksi</label>
+                <input name="date" type="date" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-200">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Jenis Transaksi</label>
+                <select name="type" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-200">
+                  <option value="income">Pemasukan (+)</option>
+                  <option value="expense">Pengeluaran (-)</option>
+                </select>
+              </div>
             </div>
-            <span id="finance-total" class="text-sm text-slate-500"></span>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Keterangan Transaksi</label>
+              <input name="description" required maxlength="160" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-200" placeholder="Contoh: Penerimaan Iuran Kebersihan Bulan Ini">
+            </div>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Nominal (Rp)</label>
+                <input name="amount" type="number" min="0" step="1" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-200" placeholder="50000">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Kategori Transaksi</label>
+                <input name="category" maxlength="80" value="Kas RT" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-200">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Catatan Tambahan (Opsional)</label>
+              <input name="note" maxlength="200" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-emerald-200" placeholder="Nomor bukti pembayaran / info pendukung">
+            </div>
+            <button class="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-700 transition-all shadow-md">
+              Simpan Transaksi Kas
+            </button>
+          </form>
+        </section>
+
+        <section class="bg-white border border-slate-200/80 rounded-3xl shadow-soft overflow-hidden">
+          <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+            <h2 class="font-black text-slate-900">Catatan Transaksi Dipublikasikan</h2>
+            <span id="finance-total" class="text-xs font-semibold px-3 py-1 bg-slate-100 rounded-full text-slate-600">0 Transaksi</span>
           </div>
           <div class="table-scroll">
             <table class="min-w-full text-sm">
-              <thead class="bg-slate-50 text-slate-500">
+              <thead class="bg-slate-50 text-slate-500 font-bold uppercase text-xs">
                 <tr>
                   <th class="text-left px-5 py-3">Tanggal</th>
                   <th class="text-left px-5 py-3">Keterangan</th>
@@ -243,9 +263,10 @@
             </table>
           </div>
         </section>
-      </section>
-    </main>
-  </div>
+      </div>
+
+    </section>
+  </main>
 
   <div id="toast-wrap" class="toast-wrap"></div>
   <script src="js/admin.js"></script>
