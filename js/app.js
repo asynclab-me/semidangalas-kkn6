@@ -8,7 +8,7 @@
 (() => {
   'use strict';
 
-  const DEFAULT_API_URL = '';
+  const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbwxXe6GzAb2vTgmjrRCmyTFrwq9JnSi-L3IWYVYXU2OENRbFH84iE2Ex6golr1fEb9DSA/exec';
   const STORAGE_KEY = 'mading_rt003_api_url';
 
   const demoData = {
