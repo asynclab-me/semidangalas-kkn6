@@ -1,15 +1,10 @@
 /* Mading Digital RT 003 / RW 002
  * Admin frontend for the Google Apps Script Web App.
- *
- * Security model:
- * - Public reads use doGet.
- * - Mutations use an ADMIN_KEY entered by the administrator at login.
- * - The key is held in sessionStorage only; it is not hard-coded into this client.
  */
 (() => {
   'use strict';
 
-  const DEFAULT_API_URL = '';
+  const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbwxXe6GzAb2vTgmjrRCmyTFrwq9JnSi-L3IWYVYXU2OENRbFH84iE2Ex6golr1fEb9DSA/exec';
   const API_URL_KEY = 'mading_rt003_api_url';
   const SESSION_KEY = 'mading_rt003_admin_key';
 
@@ -51,6 +46,10 @@
     const d = new Date(value);
     if (Number.isNaN(d.getTime())) return value || '-';
     return new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium' }).format(d);
+  }
+
+  function formatTime(value) {
+    return value ? `${value} WIB` : '';
   }
 
   async function request(action, payload = null) {
@@ -100,6 +99,31 @@
     `).join('');
   }
 
+  function renderSchedules() {
+    const list = $('#admin-schedule-list');
+    $('#schedule-total').textContent = `${state.schedules.length} item`;
+
+    if (!state.schedules.length) {
+      list.innerHTML = '<div class="p-8 text-center text-slate-500">Belum ada agenda kegiatan.</div>';
+      return;
+    }
+
+    list.innerHTML = state.schedules.map((item) => `
+      <div class="p-5 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="px-2 py-1 rounded-full bg-teal-50 text-teal-700 text-xs font-semibold">${escapeHtml(item.type || 'Kegiatan')}</span>
+          </div>
+          <h3 class="font-black mt-2">${escapeHtml(item.title)}</h3>
+          <p class="text-sm text-slate-600 mt-1">🗓️ ${escapeHtml(formatDate(item.date))} ${item.time ? `· ⏰ ${escapeHtml(formatTime(item.time))}` : ''}</p>
+          <p class="text-sm text-slate-500 mt-0.5">📍 ${escapeHtml(item.location || 'Lokasi menyusul')}</p>
+          ${item.description ? `<p class="text-sm text-slate-600 mt-2">${escapeHtml(item.description)}</p>` : ''}
+        </div>
+        <button data-delete-schedule="${escapeHtml(item.id)}" class="shrink-0 px-3 py-2 rounded-xl border border-rose-200 text-rose-700 font-semibold hover:bg-rose-50">Hapus</button>
+      </div>
+    `).join('');
+  }
+
   function renderFinance() {
     const table = $('#admin-finance-table');
     $('#finance-total').textContent = `${state.finance.length} transaksi`;
@@ -127,6 +151,7 @@
 
   function render() {
     renderAnnouncements();
+    renderSchedules();
     renderFinance();
     $('#admin-status').textContent = `Terhubung · ${new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date())}`;
   }
@@ -206,6 +231,31 @@
     }
   }
 
+  async function handleScheduleSubmit(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const payload = {
+      title: String(formData.get('title') || '').trim(),
+      date: String(formData.get('date') || '').trim(),
+      time: String(formData.get('time') || '').trim(),
+      location: String(formData.get('location') || '').trim(),
+      type: String(formData.get('type') || 'Kegiatan').trim(),
+      description: String(formData.get('description') || '').trim()
+    };
+
+    if (!payload.title || !payload.date) return;
+
+    try {
+      await request('addSchedule', payload);
+      form.reset();
+      showToast('Agenda kegiatan berhasil disimpan.', 'success');
+      await refresh();
+    } catch (error) {
+      showToast(`Gagal menyimpan agenda: ${error.message}`, 'error');
+    }
+  }
+
   async function handleFinanceSubmit(event) {
     event.preventDefault();
     const form = event.currentTarget;
@@ -275,11 +325,17 @@
     $('#logout-btn').addEventListener('click', logout);
     $('#refresh-btn').addEventListener('click', refresh);
     $('#announcement-form').addEventListener('submit', handleAnnouncementSubmit);
+    $('#schedule-form').addEventListener('submit', handleScheduleSubmit);
     $('#finance-form').addEventListener('submit', handleFinanceSubmit);
 
     $('#admin-announcement-list').addEventListener('click', (event) => {
       const button = event.target.closest('[data-delete-announcement]');
       if (button) deleteItem('deleteAnnouncement', button.dataset.deleteAnnouncement, 'pengumuman');
+    });
+
+    $('#admin-schedule-list').addEventListener('click', (event) => {
+      const button = event.target.closest('[data-delete-schedule]');
+      if (button) deleteItem('deleteSchedule', button.dataset.deleteSchedule, 'agenda');
     });
 
     $('#admin-finance-table').addEventListener('click', (event) => {
